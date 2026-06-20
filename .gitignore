@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+.venv/
+
+# Large Datasets (Git limit is typically 100MB)
+data/raw/*.tif
+data/processed/delhi_thermal_features.csv
+
+# Large Model Weights
+models/*.pth
+
+# OSMnx Cache
+cache/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/

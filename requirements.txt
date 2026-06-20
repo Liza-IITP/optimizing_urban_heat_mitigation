@@ -1,0 +1,15 @@
+earthengine-api
+geopandas
+rasterio
+shapely
+xarray
+lightgbm
+shap
+pymoo
+streamlit
+numpy
+pandas
+scikit-learn
+matplotlib
+folium
+requests
