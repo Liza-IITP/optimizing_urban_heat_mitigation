@@ -44,26 +44,45 @@ The 3D rasters are flattened into a 1.5 million row CSV. Each row represents a s
 
 ### 3.1 Liang's Narrowband to Broadband Albedo
 Sentinel-2 only captures specific wavelengths. We use Liang's (2001) empirical 5-band formula to estimate total shortwave Albedo:
-$$ \alpha = 0.356\rho_{blue} + 0.130\rho_{red} + 0.373\rho_{nir} + 0.085\rho_{swir1} + 0.072\rho_{swir2} - 0.0018 $$
+
+$$
+\alpha = 0.356\rho_{blue} + 0.130\rho_{red} + 0.373\rho_{nir} + 0.085\rho_{swir1} + 0.072\rho_{swir2} - 0.0018
+$$
 
 ### 3.2 Relative Heat Island Intensity (RHII)
 To identify how much hotter the city is compared to its natural state, we find the mean LST of "Cropland" pixels (where NDVI > 0.4 and Albedo < 0.25). 
-$$ RHII_i = LST_i - \overline{LST}_{cropland} $$
+
+$$
+RHII_i = LST_i - \overline{LST}_{cropland}
+$$
 
 ### 3.3 AHE Empirical Proxies
-When structural OSM data times out, AHE is mapped using inverse physical logic (where $NDVI_{norm}$ and $Albedo_{norm}$ are scaled 0 to 1):
-* **BAH:** Buildings destroy vegetation. $BAH = (1.0 - NDVI_{norm}) \times 100$
-* **TAH:** Asphalt roads lack vegetation *and* have very low albedo. $TAH = (1.0 - NDVI_{norm}) \times (1.0 - Albedo_{norm}) \times 80$
+When structural OSM data times out, AHE is mapped using inverse physical logic (where `NDVI_norm` and `Albedo_norm` are scaled 0 to 1):
+* **BAH:** Buildings destroy vegetation. `BAH = (1.0 - NDVI_norm) * 100`
+* **TAH:** Asphalt roads lack vegetation and have very low albedo. `TAH = (1.0 - NDVI_norm) * (1.0 - Albedo_norm) * 80`
 
 ### 3.4 Surface Energy Balance (The PINN Constraint)
 In `train_pinn.py`, we implement a simplified Surface Energy Balance. 
-1. **Stefan-Boltzmann Law:** The longwave radiation $E$ emitted by the ground requires the absolute temperature in Kelvin:
-   $$ T_{Kelvin} = LST_{Celsius} + 273.15 $$
-   $$ LW_{out} = \epsilon \sigma (T_{Kelvin})^4 $$
-   *(where $\sigma = 5.67 \times 10^{-8} \ W/m^2/K^4$ and $\epsilon \approx 0.97$)*
+
+1. **Stefan-Boltzmann Law:** The longwave radiation `E` emitted by the ground requires the absolute temperature in Kelvin:
+
+$$
+T_{Kelvin} = LST_{Celsius} + 273.15
+$$
+
+$$
+LW_{out} = \epsilon \sigma (T_{Kelvin})^4
+$$
+
+*(where `σ = 5.67e-8 W/m²/K⁴` and `ε ≈ 0.97`)*
+
 2. **Available Energy:** The net radiation entering the pixel plus the Anthropogenic heat:
-   $$ Available Energy = \left[ (1-\alpha)SW_{in} + LW_{in} - LW_{out} \right] + BAH + TAH $$
-3. **The Physics Loss:** On a clear summer day, *Available Energy* must be strictly positive. If the neural network predicts an extremely high hallucinated temperature where $LW_{out}$ eclipses incoming radiation and AHE, it is penalized.
+
+$$
+Available\ Energy = [ (1-\alpha)SW_{in} + LW_{in} - LW_{out} ] + BAH + TAH
+$$
+
+3. **The Physics Loss:** On a clear summer day, *Available Energy* must be strictly positive. If the neural network predicts an extremely high hallucinated temperature where `LW_out` eclipses incoming radiation and AHE, it is penalized.
 
 ---
 
