@@ -1,15 +1,32 @@
+# Core geospatial
 earthengine-api
 geopandas
 rasterio
 shapely
 xarray
+
+# Machine learning
 lightgbm
 shap
 pymoo
-streamlit
+torch
+scikit-learn
+
+# Data
 numpy
 pandas
-scikit-learn
+
+# Visualisation & dashboard
+streamlit
+pydeck
 matplotlib
 folium
+
+# AI agent
+langchain
+langchain-openai
+openai
+
+# Utilities
 requests
+scipy

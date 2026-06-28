@@ -1,28 +1,91 @@
-# Python
+# =============================================================
+# Python bytecode & build artifacts
+# =============================================================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+build/
+dist/
+*.egg-info/
+
+# =============================================================
+# Virtual environments
+# =============================================================
 env/
 venv/
-.env
 .venv/
+.env/
 
-# Large Datasets (Git limit is typically 100MB)
+# =============================================================
+# Environment & secrets — NEVER commit credentials
+# =============================================================
+.env
+.env.*
+*.env
+secrets.json
+service_account*.json
+*credentials*.json
+gee_credentials.json
+application_default_credentials.json
+token.json
+
+# =============================================================
+# Large binary data — exceeds GitHub 100 MB limit
+# =============================================================
 data/raw/*.tif
+data/raw/*.nc
 data/processed/delhi_thermal_features.csv
 
-# Large Model Weights
+# =============================================================
+# Trained model weights — large binary blobs
+# Store on DVC / HuggingFace Hub / GCS instead
+# =============================================================
 models/*.pth
+models/*.pt
+models/*.onnx
+models/*.pkl
+models/*.joblib
 
-# OSMnx Cache
+# =============================================================
+# OSMnx / requests cache
+# =============================================================
 cache/
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# =============================================================
+# Jupyter notebook checkpoints & scratch
+# =============================================================
+.ipynb_checkpoints/
+*.ipynb
 
-# IDEs
+# =============================================================
+# Streamlit secrets
+# =============================================================
+.streamlit/secrets.toml
+
+# =============================================================
+# OS generated files
+# =============================================================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =============================================================
+# IDE configs
+# =============================================================
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# =============================================================
+# Coverage & testing artifacts
+# =============================================================
+.coverage
+htmlcov/
+.pytest_cache/
